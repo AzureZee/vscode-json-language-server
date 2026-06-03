@@ -7,7 +7,7 @@ JSON language server extracted from [vscode/extensions/json-language-features/se
 - Install
 
   ```sh
-  git clone https://github.com/AzureZee/vscode-json-language-server.git; cd vscode-json-language-server; npm run compile; npm link
+  git clone https://github.com/AzureZee/vscode-json-language-server.git; cd vscode-json-language-server; npm run build
   ```
 
 - Neovim.

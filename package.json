@@ -13,6 +13,7 @@
   },
   "main": "./out/node/jsonServerMain",
   "scripts": {
+    "build": "npm i && npm run compile && npm link",
     "compile": "tsc",
     "watch": "tsc --watch",
     "clean": "rimraf out",
