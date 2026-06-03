@@ -6,7 +6,7 @@
 import {
 	Connection,
 	TextDocuments, InitializeParams, InitializeResult, NotificationType, RequestType, ResponseError,
-	DocumentRangeFormattingRequest, Disposable, ServerCapabilities, TextDocumentSyncKind, TextEdit, DocumentFormattingRequest, TextDocumentIdentifier, FormattingOptions, Diagnostic, CodeAction, CodeActionKind
+	DocumentRangeFormattingRequest, Disposable, ServerCapabilities, TextDocumentSyncKind, TextEdit, DocumentFormattingRequest, TextDocumentIdentifier, FormattingOptions, Diagnostic, CodeAction, CodeActionKind, ExecuteCommandRequest
 } from 'vscode-languageserver';
 
 import { runSafe, runSafeAsync } from './utils/runner.js';
@@ -202,6 +202,9 @@ export function startServer(connection: Connection, runtime: RuntimeEnvironment)
 			},
 			codeActionProvider: {
 				codeActionKinds: [sortCodeActionKind]
+			},
+			executeCommandProvider: {
+				commands: ['json.sort']
 			}
 		};
 
@@ -357,6 +360,18 @@ export function startServer(connection: Connection, runtime: RuntimeEnvironment)
 		return [];
 	});
 
+	connection.onRequest(ExecuteCommandRequest.type, async params => {
+		if (params.command === 'json.sort') {
+			const uri = params.arguments?.[0];
+			const options = params.arguments?.[1];
+			const document = documents.get(uri);
+			if (document) {
+				return languageService.sort(document, options);
+			}
+		}
+		return [];
+	});
+
 	function updateConfiguration(extraSchemas?: SchemaConfiguration[]) {
 		const languageSettings = {
 			validate: validateEnabled,
@@ -477,10 +492,11 @@ export function startServer(connection: Connection, runtime: RuntimeEnvironment)
 		return runSafeAsync(runtime, async () => {
 			const document = documents.get(codeActionParams.textDocument.uri);
 			if (document) {
-				const sortCodeAction = CodeAction.create('Sort JSON', sortCodeActionKind);
-				sortCodeAction.command = {
-					command: 'json.sort',
-					title: l10n.t('Sort JSON')
+				const edits = languageService.sort(document, { insertSpaces: true, tabSize: 2 });
+				const sortCodeAction: CodeAction = {
+					title: 'Sort JSON',
+					kind: sortCodeActionKind,
+					edit: { changes: { [codeActionParams.textDocument.uri]: edits } }
 				};
 				return [sortCodeAction];
 			}
