@@ -1,10 +1,28 @@
 # VSCode JSON Language Server
 
-[![NPM Version](https://img.shields.io/npm/v/vscode-json-languageserver.svg)](https://npmjs.org/package/vscode-json-languageserver)
-[![NPM Downloads](https://img.shields.io/npm/dm/vscode-json-languageserver.svg)](https://npmjs.org/package/vscode-json-languageserver)
-[![NPM Version](https://img.shields.io/npm/l/vscode-json-languageserver.svg)](https://npmjs.org/package/vscode-json-languageserver)
+JSON language server extracted from [vscode/extensions/json-language-features/server](https://github.com/microsoft/vscode/tree/master/extensions/json-language-features/server).
 
-The JSON Language server provides language-specific smarts for editing, validating and understanding JSON documents. It runs as a separate executable and implements the [language server protocol](https://microsoft.github.io/language-server-protocol/overview) to be connected by any code editor or IDE.
+## TL;DR
+
+- Install
+
+  ```sh
+  git clone https://github.com/AzureZee/vscode-json-language-server.git; cd vscode-json-language-server; npm run compile; npm link
+  ```
+
+- Neovim.
+
+  [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/blob/master/README.md)
+
+  ```lua
+  vim.pack.add{'https://github.com/neovim/nvim-lspconfig'}
+  vim.lsp.enable('jsonls')
+  ```
+
+- Helix
+
+  Ready out of the box.
+  See [Default Config](https://github.com/helix-editor/helix/blob/master/languages.toml#L627C53-L627C53)
 
 ## Capabilities
 
@@ -37,8 +55,8 @@ The JSON language server expects the client to only send requests and notificati
 
 The JSON language server has the following dependencies on the client's capabilities:
 
-- Inline suggestion requires that the client capability has *snippetSupport*. If not supported by the client, the server will not offer the completion capability.
-- Formatting support requires the client to support *dynamicRegistration* for *rangeFormatting*. If not supported by the client, the server will not offer the format capability.
+- Inline suggestion requires that the client capability has _snippetSupport_. If not supported by the client, the server will not offer the completion capability.
+- Formatting support requires the client to support _dynamicRegistration_ for _rangeFormatting_. If not supported by the client, the server will not offer the format capability.
 
 ## Configuration
 
@@ -62,7 +80,7 @@ The server supports the following settings:
 
 - json
   - `format`
-    - `enable`: Whether the server should register the formatting support. This option is only applicable if the client supports *dynamicRegistration* for *rangeFormatting* and `initializationOptions.provideFormatter` is not defined.
+    - `enable`: Whether the server should register the formatting support. This option is only applicable if the client supports _dynamicRegistration_ for _rangeFormatting_ and `initializationOptions.provideFormatter` is not defined.
   - `validate`
     - `enable`: Whether the server should validate. Defaults to `true` if not set.
   - `schemas`: Configures association of file names to schema URL or schemas and/or associations of schema URL to schema content.
@@ -75,29 +93,26 @@ The server supports the following settings:
   - `jsoncFoldingLimit`: The max number of folding ranges to be computed for jsonc documents (for performance reasons)
 
 ```json
-    {
-        "http": {
-            "proxy": "",
-            "proxyStrictSSL": true
-        },
-        "json": {
-            "format": {
-                "enable": true
-            },
-            "schemas": [
-                {
-                    "fileMatch": [
-                        "foo.json",
-                        "*.superfoo.json"
-                    ],
-                    "url": "http://www.schemastore.org/foo",
-                    "schema": {
-                        "type": "array"
-                    }
-                }
-            ]
+{
+  "http": {
+    "proxy": "",
+    "proxyStrictSSL": true
+  },
+  "json": {
+    "format": {
+      "enable": true
+    },
+    "schemas": [
+      {
+        "fileMatch": ["foo.json", "*.superfoo.json"],
+        "url": "http://www.schemastore.org/foo",
+        "schema": {
+          "type": "array"
         }
-    }
+      }
+    ]
+  }
+}
 ```
 
 ### Schema configuration and custom schema content delivery
@@ -186,7 +201,6 @@ interface ISchemaAssociation {
    */
   schema?: JSONSchema;
 }
-
 ```
 
 `ISchemaAssociations`
@@ -208,42 +222,7 @@ If the setting `jsonFoldingLimit` or `jsoncFoldingLimit` is set, the JSON langua
 
 The JSON language server is shipped with [Visual Studio Code](https://code.visualstudio.com/) as part of the built-in VSCode extension `json-language-features`. The server is started when the first JSON file is opened. The [VSCode JSON documentation](https://code.visualstudio.com/docs/languages/json) for detailed information on the user experience and has more information on how to configure the language support.
 
-## Integrate
-
-If you plan to integrate the JSON language server into an editor and IDE, check out [this page](https://microsoft.github.io/language-server-protocol/implementors/tools/) if there's already an LSP client integration available.
-
-You can also launch the language server as a command and connect to it.
-For that, install the `vscode-json-language-server` npm module:
-
-`npm install -g vscode-json-language-server`
-
-Start the language server with the `vscode-json-language-server` command. Use a command line argument to specify the preferred communication channel:
-
-```
-vscode-json-language-server --node-ipc
-vscode-json-language-server --stdio
-vscode-json-language-server --socket=<port>
-```
-
 To connect to the server from NodeJS, see Remy Suen's great write-up on [how to communicate with the server](https://github.com/rcjsuen/dockerfile-language-server-nodejs#communicating-with-the-server) through the available communication channels.
-
-## Participate
-
-The source code of the JSON language server can be found in the [VSCode repository](https://github.com/microsoft/vscode) at [extensions/json-language-features/server](https://github.com/microsoft/vscode/tree/master/extensions/json-language-features/server).
-
-File issues and pull requests in the [VSCode GitHub Issues](https://github.com/microsoft/vscode/issues). See the document [How to Contribute](https://github.com/microsoft/vscode/wiki/How-to-Contribute) on how to build and run from source.
-
-Most of the functionality of the server is located in libraries:
-
-- [jsonc-parser](https://github.com/microsoft/node-jsonc-parser) contains the JSON parser and scanner.
-- [vscode-json-languageservice](https://github.com/microsoft/vscode-json-languageservice) contains the implementation of all features as a re-usable library.
-- [vscode-languageserver-node](https://github.com/microsoft/vscode-languageserver-node) contains the implementation of language server for NodeJS.
-
-Help on any of these projects is very welcome.
-
-## Code of Conduct
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
 ## License
 
