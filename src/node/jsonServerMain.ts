@@ -43,10 +43,10 @@ function getFileRequestService(): RequestService {
 			try {
 				const uri = Uri.parse(location);
 				return (await fs.readFile(uri.fsPath, encoding)).toString();
-			} catch (e) {
-				if (e.code === 'ENOENT') {
+			} catch (e: unknown) {
+				if ((e as NodeJS.ErrnoException).code === 'ENOENT') {
 					throw new Error(l10n.t('Schema not found: {0}', location));
-				} else if (e.code === 'EISDIR') {
+				} else if ((e as NodeJS.ErrnoException).code === 'EISDIR') {
 					throw new Error(l10n.t('{0} is a directory, not a file', location));
 				}
 				throw e;
