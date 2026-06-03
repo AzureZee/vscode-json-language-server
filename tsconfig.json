@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+		"target": "ES2024",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"outDir": "./out",
+		"rootDir": "./src",
+		"sourceMap": true,
+		"declaration": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"lib": [
+			"ES2024"
+		],
+		"types": [
+			"node"
+		]
+	},
+	"include": [
+		"src/**/*"
+	]
+}
