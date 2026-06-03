@@ -213,16 +213,16 @@ The JSON language server is shipped with [Visual Studio Code](https://code.visua
 If you plan to integrate the JSON language server into an editor and IDE, check out [this page](https://microsoft.github.io/language-server-protocol/implementors/tools/) if there's already an LSP client integration available.
 
 You can also launch the language server as a command and connect to it.
-For that, install the `vscode-json-languageserver` npm module:
+For that, install the `vscode-json-language-server` npm module:
 
-`npm install -g vscode-json-languageserver`
+`npm install -g vscode-json-language-server`
 
-Start the language server with the `vscode-json-languageserver` command. Use a command line argument to specify the preferred communication channel:
+Start the language server with the `vscode-json-language-server` command. Use a command line argument to specify the preferred communication channel:
 
 ```
-vscode-json-languageserver --node-ipc
-vscode-json-languageserver --stdio
-vscode-json-languageserver --socket=<port>
+vscode-json-language-server --node-ipc
+vscode-json-language-server --stdio
+vscode-json-language-server --socket=<port>
 ```
 
 To connect to the server from NodeJS, see Remy Suen's great write-up on [how to communicate with the server](https://github.com/rcjsuen/dockerfile-language-server-nodejs#communicating-with-the-server) through the available communication channels.

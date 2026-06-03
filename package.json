@@ -1,5 +1,5 @@
 {
-  "name": "vscode-json-languageserver",
+  "name": "vscode-json-language-server",
   "description": "JSON language server",
   "version": "1.3.4",
   "author": "Microsoft Corporation",
@@ -9,7 +9,7 @@
     "node": ">=18"
   },
   "bin": {
-    "vscode-json-languageserver": "./bin/vscode-json-languageserver"
+    "vscode-json-language-server": "./bin/vscode-json-language-server"
   },
   "main": "./out/node/jsonServerMain",
   "scripts": {
